@@ -48,6 +48,7 @@ header {
   border-radius: 10px;
   outline: none;
   padding: 0.5rem;
+  font-size: 1rem;
 }
 
 #todo-button {
@@ -91,7 +92,7 @@ ul li:nth-child(even) {
 }
 
 ul li:hover {
-  transform: translate(3px, 2px);
+  transform: translate(10px);
 }
 
 li i {
