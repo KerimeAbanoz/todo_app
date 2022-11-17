@@ -21,7 +21,11 @@ button.addEventListener("click", () => {
     alert(`Please enter some plans`);
   } else {
     //? or add the plan
-    list.innerHTML += `<li class="ker"><i class="fa-solid fa-check"></i>${input.value}<i class="fa-solid fa-trash"></i></li>`;
+    const newTodo = {
+      id: new Date().getTime(),
+      completed: false,
+      text: input.value,
+    };
     // add 1 to total
     total += 1;
     // console.log(total);
