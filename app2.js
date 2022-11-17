@@ -5,14 +5,18 @@ const list = document.querySelector("#todo-ul");
 const check = document.querySelector(".fa-check");
 const trash = document.querySelectorAll(".fa-trash");
 
+//? read the data from localStorage and turn it into an array
+//? if there is null, give an empty array
+let todos = JSON.parse(localStorage.getItem("TODOS")) || [];
+console.log(todos)
+
 let total = 0;
 // let completed = 0;
 // const todoAdd = document.querySelector(".todo-add")
 
-// todoAdd.innerHTML += `<h1>Total: ${total}</h1>`
-// todoAdd.innerHTML += `<h1>Completed: ${completed}</h1>`
 
-//! EVENTS
+
+//! ------------------ EVENTS ------------------
 
 //? Button Event
 button.addEventListener("click", () => {
@@ -23,11 +27,15 @@ button.addEventListener("click", () => {
     //? create a new plan
     const newTodo = {
       id: new Date().getTime(),
-      completed: false,
+      done: false,
       text: input.value,
     };
     //? add it to the dom
     createListElement(newTodo);
+    //? push newTodo objtect to a todos
+    todos.push(newTodo);
+    //? add it to the localStorage as string because we are gonna turn it into an array
+    localStorage.setItem("TODOS", JSON.stringify(todos));
     //? refresh the input area
     input.value = "";
     // add 1 to total
@@ -44,15 +52,33 @@ input.addEventListener("keydown", (e) => {
   }
 });
 
-//? Focus Event
+//? Load Event
 window.addEventListener("load", () => {
   input.focus();
+
 });
 
-const createListElement = (newTodo) => {
+//? Checked and Delete Event
+list.addEventListener("click", (e) => {
+  //? if the event isfrom trash
+  if (e.target.classList.contains("fa-trash")) {
+    e.target.parentElement.remove();
+  }
+  //? if the event is from check
+  if (e.target.classList.contains("fa-check")) {
+    e.target.parentElement.classList.toggle("checked");
+  }
+});
+
+//! ------------------ Function Declerations ------------------
+
+//? create new li for each plan
+function createListElement(newTodo) {
+  const { id, done, text } = newTodo; //? destr
+
   //? create a new i element and give it the id of newTodo object
   const li = document.createElement("li");
-  li.setAttribute("id", newTodo.id);
+  li.setAttribute("id", id);
 
   //? create OK icon and appent it to li element
   const okIcon = document.createElement("i");
@@ -61,7 +87,7 @@ const createListElement = (newTodo) => {
 
   //? create p element which has the plan inside and append it to li element
   const p = document.createElement("p");
-  const pText = document.createTextNode(newTodo.text);
+  const pText = document.createTextNode(text);
   p.appendChild(pText);
   li.appendChild(p);
 
@@ -72,24 +98,19 @@ const createListElement = (newTodo) => {
 
   //? appent all to the list element
   list.appendChild(li);
+
+  //? check the newTodo if it's done is true, add checked class
+  // done ? li.classList.add("checked") : ""
+  done && li.classList.add("checked");
+  console.log(li);
 };
 
-//? Checked event
-// console.log(check);
-list.addEventListener("click", (e) => {
-  if (e.target.classList.contains("fa-check")) {
-    e.target.clasList.add("checked");
-    console.log(e.target.parentElement.classList);
-  }
-});
-// check.forEach(i => i.addEventListener("click", ()=>{
-// i.parentElement.classList.add("checked")
-// console.log(i.parentElement);
-// }));
 
-//? trash Event
-//? ilgili planı kaldır
-// çöp = queryAll(fa-trash)
-// çöp.foreach(i) / i.onclick i.parent.remove
-//? total -= 1
-//? ekrana bas
+//? rendering each plan saved to the localStorage
+const renderSavedTodos = () => {
+  todos.forEach((todo) => {
+    createListElement(todo);
+  });
+};
+
+renderSavedTodos()
