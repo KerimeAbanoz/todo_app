@@ -66,14 +66,31 @@ list.addEventListener("click", (e) => {
     localStorage.setItem("TODOS", JSON.stringify(todos));
   }
   //? if the event is from check
-  if (e.target.classList.contains("fa-check")) {
-    e.target.parentElement.classList.toggle("checked");
+  if (e.target.classList.contains("fa-square")) {
+    e.target.classList.remove("fa-square")
+    e.target.classList.add("fa-square-check")
+    e.target.parentElement.classList.add("checked");
     //? update todos array with the correct classname
     todos.map((todo, index) => {
       if (todo.id == id) {
         todos[index].done = !todos[index].done;
       }
     });
+    
+    //? update whole todos array to the localStorage
+    localStorage.setItem("TODOS", JSON.stringify(todos));
+  }
+  if (e.target.classList.contains("fa-square-check")) {
+    e.target.classList.remove("fa-square-check")
+    e.target.classList.add("fa-square")
+    e.target.parentElement.classList.remove("checked");
+    //? update todos array with the correct classname
+    todos.map((todo, index) => {
+      if (todo.id == !id) {
+        todos[index].done = !todos[index].done;
+      }
+    });
+  
     //? update whole todos array to the localStorage
     localStorage.setItem("TODOS", JSON.stringify(todos));
   }
@@ -91,7 +108,7 @@ function createListElement(newTodo) {
 
   //? create OK icon and append it to li element
   const okIcon = document.createElement("i");
-  okIcon.setAttribute("class", "fas fa-check");
+  okIcon.setAttribute("class", "fa-regular fa-square");
   li.appendChild(okIcon);
 
   //? create p element which has the plan inside and append it to li element
